@@ -69,6 +69,8 @@ class SerializedDataset(interface.ESPDataset, minibatched_dataset.MinibatchedDat
             self.keyremap = {}
             for k in self.input_keys:
                 self.keyremap[k] = k
+
+        print("*****", len(self.train_data))
         
         assert(len(self.train_data) > 0)
         assert(len(self.val_data) > 0)
