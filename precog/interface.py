@@ -21,6 +21,14 @@ import precog.utils.tfutil as tfutil
 
 log = logging.getLogger(__file__)
 
+def correct_yaws(yaws):
+    if yaws.shape == (10, 1, 4, 4):
+        if type(yaws) == 'tensorflow.python.framework.ops.Tensor':
+            yaws = tf.math.atan2(yaws[:,:,1,0], yaws[:,:,0,0])
+        else:
+            yaws = np.arctan2(yaws[:,:,1,0], yaws[:,:,0,0])
+    return yaws
+
 @six.add_metaclass(ABCMeta)
 class ESPOptimizer:
     @abstractmethod
@@ -506,6 +514,8 @@ class ESPTrainingInput(NumpyableTensorGroupGroup):
                   is_training,
                   metadata_list=None,
                   name=False):
+        
+         yaws = correct_yaws(yaws)
 
         # These objects convert most of their inputs to tensors.
         phi = ESPPhi(
@@ -583,6 +593,7 @@ class ESPTrainingInput(NumpyableTensorGroupGroup):
             metadata_list=self.phi_m.metadata_list)
 
     def to_feed_dict(self, S_past_world_frame, yaws, overhead_features, agent_presence, S_future_world_frame, metadata_list, light_strings, is_training):
+        yaws = correct_yaws(yaws)
         fd = tfutil.FeedDict(
             zip(self.placeholders,
                 [S_past_world_frame, yaws, overhead_features, agent_presence, light_strings, S_future_world_frame, is_training] + metadata_list.arrays))
@@ -691,6 +702,7 @@ class ESPInference:
         # Create a to_feed_dict member function, modelled after the real `to_feed_dict` function.
         # TODO this is annoying and brittle to hardcode to match the to_feed_dict above. 
         def to_feed_dict(xself, S_past_world_frame, yaws, overhead_features, agent_presence, light_strings, S_future_world_frame, metadata_list, is_training):
+            yaws = correct_yaws(yaws)
             return dict(zip(xself.placeholders,
                             [S_past_world_frame, yaws, overhead_features, agent_presence, light_strings, S_future_world_frame, is_training]))
         # Uses the fact that this collection was created in order...

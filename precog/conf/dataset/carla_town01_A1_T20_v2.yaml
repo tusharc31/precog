@@ -14,12 +14,12 @@ dataset:
     train_suffix: '/train/'
     val_suffix: '/val/'
     test_suffix: '/test/'
-    match_prefix: "ma_datum_*"
+    match_prefix: "ma_"
     keyremap:
-      player_future: 'S_future_world_frame'
-      player_past: 'S_past_world_frame'
+      player_future: 'player_future'
+      player_past: 'player_past'
       overhead_features: 'overhead_features'
-      player_yaw: 'yaws'
+      player_yaw: 'player_transform'
     extra_params:
       allow_horizon_mismatch: False
       get_sdt_params:
