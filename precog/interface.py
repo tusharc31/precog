@@ -515,7 +515,7 @@ class ESPTrainingInput(NumpyableTensorGroupGroup):
                   metadata_list=None,
                   name=False):
         
-         yaws = correct_yaws(yaws)
+        yaws = correct_yaws(yaws)
 
         # These objects convert most of their inputs to tensors.
         phi = ESPPhi(
