@@ -17,6 +17,14 @@ import precog.utils.log_util as logu
 
 log = logging.getLogger(os.path.basename(__file__))
 
+def correct_yaws(yaws):
+    if yaws.shape == (10, 1, 4, 4):
+        if type(yaws) == 'tensorflow.python.framework.ops.Tensor':
+            yaws = tf.math.atan2(yaws[:,:,1,0], yaws[:,:,0,0])
+        else:
+            yaws = np.arctan2(yaws[:,:,1,0], yaws[:,:,0,0])
+    return yaws
+
 class SerializedDataset(interface.ESPDataset, minibatched_dataset.MinibatchedDataset):
     input_keys = ['player_future', 'agent_futures', 'player_past', 'agent_pasts', 'player_yaw', 'agent_yaws', "overhead_features"]
     
