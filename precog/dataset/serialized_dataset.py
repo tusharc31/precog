@@ -141,6 +141,8 @@ class SerializedDataset(interface.ESPDataset, minibatched_dataset.MinibatchedDat
             pasts = player_pasts[..., -self.T_past:, :]
             experts = player_experts
             yaws = player_yaws
+
+        yaws = correct_yaws(yaws)
             
         # (O, B)
         # scene_tokens = np.asarray([_.metadata['scene_token'] for _ in data])
