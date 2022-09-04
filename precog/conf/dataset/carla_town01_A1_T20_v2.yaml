@@ -14,7 +14,7 @@ dataset:
     train_suffix: '/train/'
     val_suffix: '/val/'
     test_suffix: '/test/'
-    match_prefix: "ma_"
+    match_prefix: "ma_*"
     keyremap:
       player_future: 'player_future'
       player_past: 'player_past'

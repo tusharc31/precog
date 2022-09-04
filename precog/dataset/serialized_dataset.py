@@ -162,9 +162,13 @@ class SerializedDataset(interface.ESPDataset, minibatched_dataset.MinibatchedDat
         # TODO
         up = lambda x: x.upper() if x else x
         try:
+            for _ in data:
+                print(_.keys())
+            # print("*** ***", data[0].keys())
             if self.fmt == 'json':
+                light_strings = np.asarray(['NONE' for _ in data])
                 # HACK disallow failure only for dill since CARLA data should all be json.
-                light_strings = np.asarray([up(_['light_strings']) for _ in data], dtype=np.unicode_)
+                # light_strings = np.asarray([up(_['light_strings']) for _ in data], dtype=np.unicode_)
             else:
                 light_strings = np.asarray([up(_.get('traffic_light_state', None)) for _ in data], dtype=np.unicode_)
             if not all(light_strings):
@@ -172,7 +176,7 @@ class SerializedDataset(interface.ESPDataset, minibatched_dataset.MinibatchedDat
                 assert(not any(light_strings))
                 light_strings = np.asarray(['NONE' for _ in data])
         except AttributeError as e:
-            if self.fmt == 'json': raise AttributeError(e)
+            # if self.fmt == 'json': raise AttributeError(e)
             light_strings = np.asarray(['NONE' for _ in data])
             
         if experts.shape[-2] < self.T:
